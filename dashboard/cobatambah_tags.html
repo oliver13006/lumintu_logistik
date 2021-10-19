@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <link rel="stylesheet" href="tags.css" />
+    <title></title>
+  </head>
+  <main>
+    <form autocomplete="off">
+      <h1>Tags</h1>
+      <p>Press comma or click the add button to create a tag.</p>
+      <div class="input-container">
+        <input type="text" id="input" placeholder="Enter tags . . ." />
+        <button id="add-button">Add</button>
+      </div>
+      <div class="tag-container">
+        <!-- <span class="tag">oh my God <span class="remove-tag">&#10006;</span></span>
+                <span class="tag">second tag <span class="remove-tag">&#10006;</span></span>
+                <span class="tag">tag3 <span class="remove-tag">&#10006;</span></span> -->
+      </div>
+    </form>
+    <script>
+      const button = document.querySelector("#add-button");
+      const tagInput = document.querySelector("#input");
+
+      const form = document.forms[0];
+      const tagContainer = document.querySelector(".tag-container");
+      const tags = [];
+
+      const createTag = (tagValue) => {
+        const value = tagValue.trim();
+
+        if (value === "" || tags.includes(value)) return;
+
+        const tag = document.createElement("span");
+        const tagContent = document.createTextNode(value);
+        tag.setAttribute("class", "tag");
+        tag.appendChild(tagContent);
+
+        const close = document.createElement("span");
+        close.setAttribute("class", "remove-tag");
+        close.innerHTML = "&#10006;";
+        close.onclick = handleRemoveTag;
+
+        tag.appendChild(close);
+        tagContainer.appendChild(tag);
+        tags.push(tag);
+
+        tagInput.value = "";
+        tagInput.focus();
+      };
+
+      const handleRemoveTag = (e) => {
+        const item = e.target.textContent;
+        e.target.parentElement.remove();
+        tags.splice(tags.indexOf(item), 1);
+      };
+
+      const handleFormSubmit = (e) => {
+        e.preventDefault();
+        createTag(tagInput.value);
+      };
+
+      tagInput.addEventListener("keyup", (e) => {
+        const { key } = e;
+        if (key === ",") {
+          createTag(tagInput.value.substring(0, tagInput.value.length - 1));
+        }
+      });
+
+      form.addEventListener("submit", handleFormSubmit);
+    </script>
+  </main>
+</html>
